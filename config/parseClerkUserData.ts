@@ -1,4 +1,4 @@
-function parseClerkUserData(data: any) {
+export function parseClerkUserData(data: any) {
     return {
         id: data.id,
         name: `${data.first_name} ${data.last_name}`,
