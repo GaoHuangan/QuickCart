@@ -4,7 +4,11 @@ import User from "../models/User.js";
 import { parseClerkUserData } from "./parseClerkUserData.js";
 
 // Create a client to send and receive events
-export const inngest = new Inngest({ id: "quickcart-next" });
+export const inngest = new Inngest({ 
+  id: "quickcart-next",
+  signingKey: process.env.INNGEST_SIGNING_KEY,
+  eventKey: process.env.INNGEST_EVENT_KEY,
+});
 
 
 // inngest functions to save user data to database
