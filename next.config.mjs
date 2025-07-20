@@ -20,6 +20,13 @@ const nextConfig = {
             },
         ],
     },
+    experimental: {
+        turbo: {
+            resolveAlias: {
+                '@': path.resolve(__dirname, './'),
+            },
+        },
+    },
     webpack: (config) => {
         config.resolve.alias = {
             ...config.resolve.alias,
