@@ -40,7 +40,7 @@ const AddProduct = () => {
     try {
       // Get auth token for secure API request
       const token = await getToken();
-      console.log(token);
+      console.log('token:', token);
 
       // Send POST request to add product
       const { data } = await axios.post(
@@ -50,7 +50,8 @@ const AddProduct = () => {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-
+      console.log(data);
+      console.log(data.success);
       // Handle response
       if (data.success) {
         toast.success(data.message);
