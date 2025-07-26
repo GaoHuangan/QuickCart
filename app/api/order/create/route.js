@@ -19,9 +19,9 @@ export async function POST(request) {
         }
         let amount = 0;
         for (const item of items) {
-            const product = await Product.findById(item.productId)
+            const product = await Product.findById(item.product)
             if (!product) {
-                return NextResponse.json({ success: false, message: `Product with ID ${item.productId} not found` }, { status: 404 });
+                return NextResponse.json({ success: false, message: `Product with ID ${item.product} not found` }, { status: 404 });
             }
             const productPrice = product.offerPrice || product.price;
             amount += productPrice * item.quantity;
