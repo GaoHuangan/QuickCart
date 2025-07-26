@@ -43,7 +43,6 @@ export async function GET(req) {
         if (cache.has(cacheKey)) {
             const cachedData = cache.get(cacheKey);
             if (Date.now() - cachedData.timestamp < CACHE_DURATION) {
-                console.log('Cache hit for userId:', userId);
                 return NextResponse.json({
                     success: true,
                     products: cachedData.products,
@@ -55,7 +54,6 @@ export async function GET(req) {
 
         // 5. 数据库查询
         await connectDB();
-        // console.log('connected to db');
 
         // 5. 查询产品 - 只查询该seller的产品
         const products = await Product.find({ userId })
@@ -64,7 +62,6 @@ export async function GET(req) {
             .lean(); // 提升查询性能
 
         // const products = await Product.find({});
-        // console.log('products:', products);
 
         // 6. 缓存结果
         cache.set(cacheKey, {
@@ -72,7 +69,7 @@ export async function GET(req) {
             timestamp: Date.now()
         });
 
-        console.log(`Found ${products.length} products for seller ${userId}`);
+        //console.log(`Found ${products.length} products for seller ${userId}`);
 
         // 7. 返回结果
         return NextResponse.json({

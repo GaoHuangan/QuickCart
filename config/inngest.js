@@ -2,12 +2,13 @@ import { Inngest } from "inngest";
 import { connectDB } from "./db.js";
 import User from "../models/User.js";
 import { parseClerkUserData } from "./parseClerkUserData";
+import Order from "@/models/Order";
 
 // Create a client to send and receive events
-export const inngest = new Inngest({ 
-  id: "quickcart-next",
-  signingKey: process.env.INNGEST_SIGNING_KEY,
-  eventKey: process.env.INNGEST_EVENT_KEY,
+export const inngest = new Inngest({
+    id: "quickcart-next",
+    signingKey: process.env.INNGEST_SIGNING_KEY,
+    eventKey: process.env.INNGEST_EVENT_KEY,
 });
 
 
@@ -21,18 +22,17 @@ export const syncUserCreation = inngest.createFunction(
     },
     async ({ event }) => {
         const { id, name, email, imageUrl } = parseClerkUserData(event.data);
-        const userData = { 
+        const userData = {
             _id: id,
             email: email,
             name: name,
             imageUrl: imageUrl,
         }
         try {
-            console.log(`[Inngest] Syncing user ${id} - event: user.created`);
             await connectDB();
             await User.create(userData);
         } catch (error) {
-            console.error("Error syncing user from clerk:", error);
+            // Error handling without logging
         }
     }
 )
@@ -58,7 +58,7 @@ export const syncUserUpdation = inngest.createFunction(
             await connectDB();
             await User.findByIdAndUpdate(id, userData);
         } catch (error) {
-            console.error("Error updating user from clerk:", error);
+            // Error handling without logging
         }
     }
 )
@@ -77,7 +77,37 @@ export const syncUserDeletion = inngest.createFunction(
             await connectDB();
             await User.findByIdAndDelete(id);
         } catch (error) {
-            console.error("Error deleting user from clerk:", error);
+            // Error handling without logging
+        }
+    }
+)
+
+// Inngest function to create order
+export const createUserOrder = inngest.createFunction(
+    {
+        id: "create-user-order",
+        batchEvents: {
+            maxSize: 5,
+            timeout: "5s",
+        }
+    },
+    { event: "order/create", },
+    async ({ events }) => {
+        const orders = events.map((event) => {
+            return {
+                userId: event.data.userId,
+                items: event.data.items,
+                amount: event.data.amount,
+                address: event.data.address,
+                date: event.data.date,
+            }
+        })
+        await connectDB()
+        await Order.insertMany(orders)
+        return {
+            success: true,
+            process: orders.length,
+            message: "Orders created successfully",
         }
     }
 )

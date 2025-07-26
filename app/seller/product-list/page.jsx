@@ -21,15 +21,14 @@
       try {
 
         const token = await getToken()
-        console.log('fuck token:', token);
-        const data = await axios.get("/api/product/seller-list", { headers: { Authorization: `Bearer ${token}` } })
-        console.log('fuck data:', data);
+        //console.log('fuck token:', token);
+        const response = await axios.get("/api/product/seller-list", { headers: { Authorization: `Bearer ${token}` } })
 
-        if(data.data.success){
-          setProducts(data.data.products)  
+        if(response.data.success){
+          setProducts(response.data.products)  
           setLoading(false)
         }else{
-          toast.error(data.message)
+          toast.error(response.message)
         }
 
       } catch (error) {
