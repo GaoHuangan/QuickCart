@@ -1,6 +1,7 @@
 import React from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import { FaGithub, FaLinkedin } from "react-icons/fa"; // ← 加入 react-icons
 
 const Footer = () => {
   return (
@@ -40,14 +41,33 @@ const Footer = () => {
           <div>
             <h2 className="font-medium text-gray-900 mb-5">Get in touch</h2>
             <div className="text-sm space-y-2">
-              <p>+1-234-567-890</p>
-              <p>contact@greatstack.dev</p>
+              <p>+81 070-8579-6769</p>
+              <p>nickelgao@yeah.net</p>
+              <div className="flex gap-4 mt-2">
+                <a
+                  href="https://github.com/GaoHuangan"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-gray-800 transition"
+                >
+                  <FaGithub size={20} />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/gao-huangan-bb2a622a9/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-gray-800 transition"
+                >
+                  <FaLinkedin size={20} />
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
       <p className="py-4 text-center text-xs md:text-sm">
-        Copyright 2025 © GreatStack.dev All Right Reserved.
+        Copyright 2025 © GaoHuangan All Right Reserved.
       </p>
     </footer>
   );
